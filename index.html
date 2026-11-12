@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>no1 Nuke | Yusei x Binchillz x Fallout</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #05070c;
+            --surface-1: rgba(13, 17, 30, 0.78);
+            --surface-2: rgba(20, 26, 46, 0.65);
+            --surface-glass: rgba(16, 21, 38, 0.55);
+            --accent-cyan: #00f2fe; --accent-blue: #4facfe; --accent-purple: #8a2be2; --accent-pink: #f72585; --accent-red: #ff3366; --accent-green: #00f5a0; --accent-yellow: #ffb703;
+            --border-dim: rgba(255, 255, 255, 0.08); --border-glow: rgba(0, 242, 254, 0.35);
+            --text-1: #ffffff; --text-2: #94a3b8; --text-3: #64748b;
+            --font-display: 'Space Grotesk', sans-serif; --font-body: 'Plus Jakarta Sans', sans-serif; --font-code: 'JetBrains Mono', monospace;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1); --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text-1); font-family: var(--font-body); min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        #bg-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+        .glow-sphere { position: fixed; border-radius: 50%; filter: blur(140px); opacity: 0.35; z-index: 1; pointer-events: none; transition: all 1s ease; }
+        .glow-1 { width: 650px; height: 650px; background: radial-gradient(circle, #8a2be2 0%, #4facfe 100%); top: -160px; left: -120px; animation: floatGlow 18s ease-in-out infinite alternate; }
+        .glow-2 { width: 580px; height: 580px; background: radial-gradient(circle, #f72585 0%, #7209b7 100%); bottom: -150px; right: -100px; animation: floatGlow 22s ease-in-out infinite alternate-reverse; }
+        @keyframes floatGlow { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(60px, 40px) scale(1.1); } 100% { transform: translate(-40px, 70px) scale(0.95); } }
+        .grid-mesh { position: fixed; inset: 0; background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(circle at center, black 40%, transparent 95%); -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 95%); z-index: 2; pointer-events: none; }
+        
+        .view-setup { position: fixed; inset: 0; z-index: 100; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at center, rgba(14, 18, 36, 0.88) 0%, rgba(5, 7, 12, 0.98) 100%); backdrop-filter: blur(50px); -webkit-backdrop-filter: blur(50px); transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo); }
+        .view-setup.fade-out { opacity: 0; transform: scale(1.04); pointer-events: none; }
+        .setup-box { position: relative; background: linear-gradient(145deg, rgba(16, 22, 40, 0.85) 0%, rgba(9, 12, 22, 0.92) 100%); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 28px; padding: 44px 40px; width: 100%; max-width: 520px; box-shadow: 0 30px 90px rgba(0, 0, 0, 0.85), 0 0 50px rgba(0, 242, 254, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2); animation: setupEntry 0.7s var(--ease-out-expo); overflow: hidden; }
+        @keyframes setupEntry { from { opacity: 0; transform: translateY(30px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .setup-box::before { content: ''; position: absolute; top: 0; left: 20%; width: 60%; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-purple), transparent); }
+        .setup-emblem-wrap { display: flex; justify-content: center; margin-bottom: 20px; position: relative; }
+        .setup-emblem { width: 68px; height: 68px; border-radius: 22px; background: linear-gradient(135deg, rgba(0, 242, 254, 0.18), rgba(138, 43, 226, 0.25)); border: 1px solid var(--border-glow); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 35px rgba(0, 242, 254, 0.3); position: relative; }
+        .setup-emblem-ring { position: absolute; inset: -6px; border: 1.5px dashed rgba(0, 242, 254, 0.5); border-radius: 28px; animation: ringSpin 12s linear infinite; }
+        @keyframes ringSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .setup-title { font-family: var(--font-display); font-size: 22px; font-weight: 900; text-align: center; letter-spacing: 0.5px; background: linear-gradient(135deg, #ffffff 10%, #00f2fe 70%, #8a2be2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; }
+        .setup-sub { text-align: center; color: var(--text-2); font-size: 13px; font-weight: 500; margin-bottom: 26px; line-height: 1.5; }
+        .scan-loader-box { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px 0 10px 0; animation: fadeInSlide 0.3s var(--ease-out-expo); }
+        .radar-spinner { width: 52px; height: 52px; border-radius: 50%; position: relative; display: flex; align-items: center; justify-content: center; background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.25); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2); }
+        .radar-spinner::after { content: ''; position: absolute; inset: -2px; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--accent-cyan); border-right-color: var(--accent-purple); animation: radarRotate 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite; }
+        @keyframes radarRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .scan-text { font-family: var(--font-code); font-size: 12px; font-weight: 600; color: var(--accent-cyan); letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+        .scan-progress-bar { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.08); border-radius: 4px; overflow: hidden; position: relative; }
+        .scan-progress-fill { position: absolute; top: 0; left: 0; height: 100%; width: 40%; background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-purple)); border-radius: 4px; animation: scanFill 1.4s ease-in-out infinite; }
+        @keyframes scanFill { 0% { left: -40%; width: 30%; } 50% { width: 60%; } 100% { left: 100%; width: 30%; } }
+        .server-select-box { animation: fadeInSlide 0.4s var(--ease-out-expo); display: flex; flex-direction: column; gap: 16px; }
+        .server-count-badge { font-family: var(--font-code); font-size: 11px; font-weight: 700; color: var(--accent-green); background: rgba(0, 245, 160, 0.12); border: 1px solid rgba(0, 245, 160, 0.3); padding: 3px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; }
+        
+        .stage-wrapper { position: relative; z-index: 10; width: 95vw; max-width: 1380px; height: 90vh; max-height: 860px; perspective: 1200px; display: flex; transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo); }
+        .stage-card { width: 100%; height: 100%; display: grid; grid-template-columns: 440px 1fr; background: var(--surface-1); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); border: 1px solid var(--border-dim); border-radius: 28px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.15); overflow: hidden; transition: transform 0.15s ease-out, box-shadow 0.3s ease; transform-style: preserve-3d; }
+        .deck-side { display: flex; flex-direction: column; border-right: 1px solid var(--border-dim); background: linear-gradient(180deg, rgba(20, 24, 38, 0.5) 0%, rgba(10, 12, 18, 0.7) 100%); position: relative; overflow: hidden; }
+        .brand-header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.05); gap: 12px; }
+        .brand-info { display: flex; align-items: center; gap: 12px; }
+        .holo-emblem { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(138, 43, 226, 0.3)); border: 1px solid var(--border-glow); display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 20px rgba(0, 242, 254, 0.25); overflow: hidden; }
+        .holo-emblem::after { content: ''; position: absolute; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent); transform: translateX(-100%); animation: shimmer 3s infinite; }
+        @keyframes shimmer { 100% { transform: translateX(100%); } }
+        .holo-svg { width: 22px; height: 22px; filter: drop-shadow(0 0 6px var(--accent-cyan)); animation: nukeRotate 16s linear infinite, pulseIcon 2.5s ease-in-out infinite alternate; }
+        @keyframes nukeRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes pulseIcon { 0% { opacity: 0.85; } 100% { opacity: 1; } }
+        .brand-text h1 { font-family: var(--font-display); font-size: 15px; font-weight: 800; letter-spacing: 0.5px; background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .brand-text p { font-size: 10px; color: var(--text-3); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+        .target-hud-bar { padding: 10px 24px; background: rgba(0, 0, 0, 0.35); border-bottom: 1px solid rgba(255, 255, 255, 0.04); display: flex; align-items: center; justify-content: space-between; }
+        .target-indicator { display: flex; align-items: center; gap: 8px; font-family: var(--font-code); font-size: 11px; color: var(--text-2); overflow: hidden; }
+        .target-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-cyan); box-shadow: 0 0 8px var(--accent-cyan); animation: pulseLight 1.5s infinite; }
+        .target-name { color: #fff; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+        .btn-edit { background: rgba(0, 242, 254, 0.08); border: 1px solid rgba(0, 242, 254, 0.25); color: var(--accent-cyan); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: 11px; font-family: var(--font-body); font-weight: 700; display: flex; align-items: center; gap: 5px; transition: all 0.2s var(--ease-out-expo); }
+        .btn-edit:hover { background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(138, 43, 226, 0.2)); border-color: var(--accent-cyan); color: #ffffff; box-shadow: 0 0 14px rgba(0, 242, 254, 0.25); transform: translateY(-1px); }
+        .audio-ctrl-pill { display: flex; align-items: center; gap: 6px; padding: 5px 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; transition: all 0.2s ease; }
+        .audio-ctrl-pill:hover { border-color: var(--border-glow); background: rgba(0, 242, 254, 0.08); }
+        .audio-btn { background: none; border: none; color: var(--accent-cyan); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s var(--ease-spring); }
+        .audio-btn:active { transform: scale(0.85); }
+        .volume-bar { width: 42px; height: 3px; accent-color: var(--accent-cyan); cursor: pointer; }
+        
+        .deck-scroll { flex: 1; padding: 20px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+        .deck-scroll::-webkit-scrollbar { width: 5px; } .deck-scroll::-webkit-scrollbar-track { background: transparent; } .deck-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 10px; }
+        .input-box { display: flex; flex-direction: column; gap: 6px; }
+        .input-label { font-size: 11px; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.8px; display: flex; justify-content: space-between; align-items: center; }
+        .input-label .tag { font-family: var(--font-code); font-size: 10px; color: var(--accent-cyan); opacity: 0.8; }
+        .field { width: 100%; background: rgba(10, 14, 24, 0.6); border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 12px; padding: 13px 16px; color: #ffffff; font-family: var(--font-code); font-size: 13px; transition: all 0.25s var(--ease-out-expo); box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3); }
+        .field:focus { border-color: var(--accent-cyan); background: rgba(14, 18, 32, 0.85); box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.15), 0 0 20px rgba(0, 242, 254, 0.2); transform: translateY(-1px); }
+        .field::placeholder { color: var(--text-3); font-family: var(--font-body); }
+        .select-field { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300f2fe' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 14px center; background-size: 16px; cursor: pointer; font-weight: 600; }
+        .select-field option { background-color: #0b0f19; color: #fff; padding: 12px; }
+        textarea.field { resize: vertical; min-height: 80px; line-height: 1.5; }
+        .row-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .file-upload-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 14px; background: rgba(0, 242, 254, 0.05); border: 1px dashed rgba(0, 242, 254, 0.4); border-radius: 10px; color: var(--accent-cyan); font-size: 11px; font-weight: 700; font-family: var(--font-code); cursor: pointer; transition: all 0.2s var(--ease-out-expo); margin-top: 4px; }
+        .file-upload-btn:hover { background: rgba(0, 242, 254, 0.12); border-color: var(--accent-cyan); box-shadow: 0 0 12px rgba(0, 242, 254, 0.2); transform: translateY(-1px); }
+        .form-container { display: flex; flex-direction: column; gap: 14px; animation: fadeInSlide 0.35s var(--ease-out-expo); }
+        @keyframes fadeInSlide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .checkbox-row { display: flex; align-items: center; gap: 12px; padding: 4px 0; cursor: pointer; user-select: none; }
+        .modern-toggle { appearance: none; width: 36px; height: 20px; background: rgba(255, 255, 255, 0.12); border-radius: 20px; position: relative; cursor: pointer; transition: all 0.3s ease; }
+        .modern-toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; background: #fff; border-radius: 50%; transition: transform 0.3s var(--ease-spring); }
+        .modern-toggle:checked { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); box-shadow: 0 0 12px rgba(0, 242, 254, 0.4); }
+        .modern-toggle:checked::after { transform: translateX(16px); }
+        .checkbox-label { font-size: 13px; color: var(--text-2); font-weight: 600; cursor: pointer; }
+        .deck-footer { padding: 18px 24px; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(8, 10, 16, 0.4); display: flex; gap: 12px; }
+        .btn-core { flex: 1; padding: 15px; border: none; border-radius: 14px; font-family: var(--font-display); font-size: 14px; font-weight: 800; letter-spacing: 1px; cursor: pointer; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s var(--ease-out-expo); user-select: none; }
+        .btn-core:active { transform: scale(0.97); }
+        .btn-launch { flex: 1.7; background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); color: #030814; box-shadow: 0 8px 24px rgba(0, 242, 254, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6); }
+        .btn-launch:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(0, 242, 254, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.8); }
+        .btn-connect { width: 100%; margin-top: 10px; padding: 16px; }
+        .btn-stop { flex: 1; background: rgba(255, 51, 102, 0.12); color: #ff3366; border: 1px solid rgba(255, 51, 102, 0.3); }
+        .btn-stop:hover { background: linear-gradient(135deg, #ff3366, #e11d48); color: #ffffff; border-color: transparent; transform: translateY(-2px); box-shadow: 0 10px 24px rgba(255, 51, 102, 0.4); }
+        
+        .terminal-side { display: flex; flex-direction: column; background: #05060a; position: relative; overflow: hidden; }
+        .term-header { padding: 18px 24px; background: rgba(12, 16, 28, 0.6); border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: space-between; }
+        .traffic-dots { display: flex; align-items: center; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; transition: transform 0.2s ease; }
+        .dot:hover { transform: scale(1.2); }
+        .dot-r { background: #ff5f56; box-shadow: 0 0 8px rgba(255, 95, 86, 0.5); } .dot-y { background: #ffbd2e; box-shadow: 0 0 8px rgba(255, 189, 46, 0.5); } .dot-g { background: #27c93f; box-shadow: 0 0 8px rgba(39, 201, 63, 0.5); }
+        .term-status { display: flex; align-items: center; gap: 8px; font-family: var(--font-code); font-size: 11px; color: var(--text-2); padding: 4px 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 20px; }
+        .status-light { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); animation: pulseLight 1.5s infinite; }
+        @keyframes pulseLight { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+        .term-screen { flex: 1; padding: 24px; overflow-y: auto; font-family: var(--font-code); font-size: 13px; line-height: 1.8; display: flex; flex-direction: column; gap: 8px; background: radial-gradient(circle at 50% 30%, rgba(18, 24, 42, 0.2) 0%, #05060a 100%); scroll-behavior: smooth; }
+        .term-screen::-webkit-scrollbar { width: 6px; } .term-screen::-webkit-scrollbar-track { background: transparent; } .term-screen::-webkit-scrollbar-thumb { background: rgba(0, 242, 254, 0.2); border-radius: 10px; }
+        .log-entry { display: flex; align-items: flex-start; gap: 12px; animation: logEntryAnim 0.25s var(--ease-out-expo); word-break: break-all; }
+        @keyframes logEntryAnim { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
+        .log-timestamp { color: #475569; font-size: 11px; user-select: none; min-width: 65px; }
+        .log-tag { font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; user-select: none; }
+        .tag-INFO { background: rgba(79, 172, 254, 0.15); color: #4facfe; border: 1px solid rgba(79, 172, 254, 0.3); }
+        .tag-SUCCESS { background: rgba(0, 245, 160, 0.15); color: #00f5a0; border: 1px solid rgba(0, 245, 160, 0.35); text-shadow: 0 0 8px rgba(0, 245, 160, 0.4); }
+        .tag-WAITING { background: rgba(255, 189, 46, 0.15); color: #ffbd2e; border: 1px solid rgba(255, 189, 46, 0.35); }
+        .log-content { color: #e2e8f0; flex: 1; }
+        .log-content.SUCCESS { color: #f0fdf4; font-weight: 600; }
+        .log-content.WAITING { color: #fef08a; }
+
+        /* MEMBER LIST */
+        .member-list-container {
+            max-height: 150px; overflow-y: auto; background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-dim); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px;
+        }
+        .member-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-2); cursor: pointer; }
+        .member-item input[type="checkbox"] { accent-color: var(--accent-cyan); width: 16px; height: 16px; cursor: pointer; }
+        
+        .corner-mascot { position: absolute; bottom: 24px; right: 28px; width: 90px; height: 90px; pointer-events: none; opacity: 0.4; transition: opacity 0.3s ease; }
+        .stage-card:hover .corner-mascot { opacity: 0.85; }
+        .mascot-ring { position: absolute; inset: 0; border: 2px dashed rgba(0, 242, 254, 0.4); border-radius: 50%; animation: mascotRotate 10s linear infinite; }
+        .mascot-core { position: absolute; inset: 12px; border-radius: 50%; background: radial-gradient(circle, rgba(138, 43, 226, 0.3), rgba(0, 242, 254, 0.1)); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0, 242, 254, 0.2); }
+        @keyframes mascotRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .hidden { display: none !important; }
+        @media (max-width: 960px) { .stage-card { grid-template-columns: 1fr; } .terminal-side { min-height: 350px; } }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="glow-sphere glow-1"></div>
+    <div class="glow-sphere glow-2"></div>
+    <div class="grid-mesh"></div>
+
+    <!-- SETUP VIEW -->
+    <div class="view-setup" id="view-setup">
+        <div class="setup-box">
+            <div class="setup-emblem-wrap">
+                <div class="setup-emblem">
+                    <div class="setup-emblem-ring"></div>
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="2.5" fill="#00f2fe"></circle>
+                        <path d="M12 2.5a9.5 9.5 0 0 0-4.75 1.27l2.37 4.12a4.75 4.75 0 0 1 4.76 0l2.37-4.12A9.5 9.5 0 0 0 12 2.5z" fill="rgba(0, 242, 254, 0.4)"></path>
+                        <path d="M3.77 16.75a9.5 9.5 0 0 0 4.75 8.23l2.38-4.12a4.75 4.75 0 0 1-2.38-4.11H3.77z" fill="rgba(0, 242, 254, 0.4)"></path>
+                        <path d="M20.23 16.75h-4.75a4.75 4.75 0 0 1-2.38 4.12l2.38 4.12a9.5 9.5 0 0 0 4.75-8.24z" fill="rgba(0, 242, 254, 0.4)"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="setup-title">NO1 NUKE SETUP</div>
+            <div class="setup-sub">Cấu hình Bot Token một lần duy nhất để giải mã danh sách Server</div>
+
+            <div id="step-token" class="input-box">
+                <label class="input-label" for="setup-token">
+                    <span>Bot Token</span>
+                    <span class="tag">GATEWAY AUTH</span>
+                </label>
+                <input type="password" id="setup-token" class="field" placeholder="Nhập Bot Token (MTQyOTM5...)" autocomplete="off">
+                <button class="btn-core btn-launch" style="margin-top: 14px;" onclick="fetchServers()">
+                    <span>🔍 QUÉT DANH SÁCH SERVER</span>
+                </button>
+            </div>
+
+            <div id="loader" class="scan-loader-box hidden">
+                <div class="radar-spinner">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                    </svg>
+                </div>
+                <div class="scan-text">Đang kết nối Discord API & giải mã...</div>
+                <div class="scan-progress-bar">
+                    <div class="scan-progress-fill"></div>
+                </div>
+            </div>
+
+            <div id="server-selection" class="server-select-box hidden" style="margin-top: 18px;">
+                <div class="input-box">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <label class="input-label" for="setup-guild">Chọn Server Mục Tiêu</label>
+                        <span class="server-count-badge" id="server-count-badge">0 Servers</span>
+                    </div>
+                    <select id="setup-guild" class="field select-field"></select>
+                </div>
+                <button class="btn-core btn-launch btn-connect" onclick="saveConfig()">
+                    <span>🚀 KẾT NỐI VÀO COMMAND DECK</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <main class="stage-wrapper hidden" id="view-dashboard">
+        <div class="stage-card" id="stage-card">
+            <section class="deck-side">
+                <header class="brand-header">
+                    <div class="brand-info">
+                        <div class="holo-emblem">
+                            <svg class="holo-svg" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="2.5" fill="#00f2fe"></circle>
+                                <path d="M12 2.5a9.5 9.5 0 0 0-4.75 1.27l2.37 4.12a4.75 4.75 0 0 1 4.76 0l2.37-4.12A9.5 9.5 0 0 0 12 2.5z" fill="rgba(0, 242, 254, 0.4)"></path>
+                                <path d="M3.77 16.75a9.5 9.5 0 0 0 4.75 8.23l2.38-4.12a4.75 4.75 0 0 1-2.38-4.11H3.77z" fill="rgba(0, 242, 254, 0.4)"></path>
+                                <path d="M20.23 16.75h-4.75a4.75 4.75 0 0 1-2.38 4.12l2.38 4.12a9.5 9.5 0 0 0 4.75-8.24z" fill="rgba(0, 242, 254, 0.4)"></path>
+                            </svg>
+                        </div>
+                        <div class="brand-text">
+                            <h1>no1 Nuke</h1>
+                            <p>by Yusei x Binchillz x Fallout</p>
+                        </div>
+                    </div>
+                    <div class="audio-ctrl-pill" title="Âm thanh tương tác">
+                        <button class="audio-btn" id="mute-toggle" onclick="toggleMute()">🔊</button>
+                        <input type="range" class="volume-bar" id="vol-ctrl" min="0" max="1" step="0.05" value="0.75" oninput="changeVolume(this.value)">
+                    </div>
+                </header>
+
+                <div class="target-hud-bar">
+                    <div class="target-indicator">
+                        <span class="target-pulse"></span>
+                        <span>MỤC TIÊU:</span>
+                        <span class="target-name" id="hud-target-name">Đã kết nối</span>
+                    </div>
+                    <button class="btn-edit" onclick="editConfig()" title="Đổi Token hoặc Server mục tiêu">
+                        <span>⚙ Cấu hình</span>
+                    </button>
+                </div>
+
+                <div class="deck-scroll">
+                    <div class="input-box">
+                        <label class="input-label" for="action">
+                            <span>Chức Năng</span>
+                            <span class="tag">01 → 08</span>
+                        </label>
+                        <select id="action" class="field select-field" onchange="toggleForm()">
+                            <option value="mass_message">01. Mass Message</option>
+                            <option value="create_channels">02. Create Channels</option>
+                            <option value="create_roles">03. Create Roles</option>
+                            <option value="ban">04. Ban Members</option>
+                            <option value="webhook_spam">05. Webhook Spam</option>
+                            <option value="delete_channels">06. Delete All Channels</option>
+                            <option value="destroy">07. Destroy Server</option>
+                            <option value="treongon">08. Treo Ngôn (Spam TXT)</option>
+                        </select>
+                    </div>
+
+                    <!-- 01. MASS MESSAGE -->
+                    <div id="form-mass_message" class="form-container">
+                        <div class="input-box">
+                            <label class="input-label" for="mm_cid">ID Kênh Cần Spam</label>
+                            <input type="text" id="mm_cid" class="field" placeholder="1234567890">
+                        </div>
+                        <div class="input-box">
+                            <label class="input-label" for="mm_msg">Nội dung (Mỗi dòng 1 tin)</label>
+                            <textarea id="mm_msg" class="field" rows="3" placeholder="Dòng 1&#10;Dòng 2"></textarea>
+                            <label class="file-upload-btn">
+                                <span>📁 Tải file .txt</span>
+                                <input type="file" accept=".txt" onchange="readTxt(event, 'mm_msg')" hidden>
+                            </label>
+                        </div>
+                        <div class="row-grid-2">
+                            <div class="input-box">
+                                <label class="input-label" for="mm_count">Số lần (0=∞)</label>
+                                <input type="number" id="mm_count" class="field" value="1" min="0">
+                            </div>
+                            <div class="input-box">
+                                <label class="input-label" for="mm_delay">Delay (s)</label>
+                                <input type="number" id="mm_delay" class="field" value="0.1" step="0.1" min="0">
+                            </div>
+                        </div>
+                        <div class="row-grid-2">
+                            <label class="checkbox-row" for="mm_big_text">
+                                <input type="checkbox" id="mm_big_text" class="modern-toggle">
+                                <span class="checkbox-label">Chữ to (#)</span>
+                            </label>
+                            <label class="checkbox-row" for="mm_random_emoji">
+                                <input type="checkbox" id="mm_random_emoji" class="modern-toggle">
+                                <span class="checkbox-label">Random Emoji</span>
+                            </label>
+                        </div>
+                        <label class="checkbox-row" for="mm_ping_toggle">
+                            <input type="checkbox" id="mm_ping_toggle" class="modern-toggle" onchange="togglePingList('mm')">
+                            <span class="checkbox-label">Bật Ping</span>
+                        </label>
+                        <div id="ping-container-mm" class="hidden" style="margin-top:10px;">
+                            <button class="btn-core btn-launch" style="padding: 10px; font-size: 12px; margin-bottom: 10px;" onclick="fetchMembers('mm')">🔄 Tải danh sách Member</button>
+                            <div class="member-list-container" id="member-list-mm"></div>
+                            <label class="checkbox-row" style="margin-top: 10px;" for="select_all_mm">
+                                <input type="checkbox" id="select_all_mm" class="modern-toggle" onchange="toggleAllMembers('mm')">
+                                <span class="checkbox-label">Chọn tất cả (Ping @everyone)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 02. CREATE CHANNELS -->
+                    <div id="form-create_channels" class="form-container hidden">
+                        <div class="input-box">
+                            <label class="input-label" for="cc_name">Tên Kênh</label>
+                            <input type="text" id="cc_name" class="field" placeholder="spam-channel">
+                        </div>
+                        <div class="row-grid-2">
+                            <div class="input-box">
+                                <label class="input-label" for="cc_num">Số lượng</label>
+                                <input type="number" id="cc_num" class="field" value="10" min="1">
+                            </div>
+                            <div class="input-box">
+                                <label class="input-label" for="cc_delay">Delay (s)</label>
+                                <input type="number" id="cc_delay" class="field" value="0.1" step="0.1" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 03. CREATE ROLES -->
+                    <div id="form-create_roles" class="form-container hidden">
+                        <div class="input-box">
+                            <label class="input-label" for="cr_name">Tiền tố tên Role</label>
+                            <input type="text" id="cr_name" class="field" placeholder="nuked-role">
+                        </div>
+                        <div class="row-grid-2">
+                            <div class="input-box">
+                                <label class="input-label" for="cr_num">Số lượng</label>
+                                <input type="number" id="cr_num" class="field" value="10" min="1">
+                            </div>
+                            <div class="input-box">
+                                <label class="input-label" for="cr_delay">Delay (s)</label>
+                                <input type="number" id="cr_delay" class="field" value="0.1" step="0.1" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 04. BAN MEMBERS -->
+                    <div id="form-ban" class="form-container hidden">
+                        <div class="input-box">
+                            <label class="input-label">Danh sách Member</label>
+                            <button class="btn-core btn-launch" style="padding: 10px; font-size: 12px; margin-bottom: 10px;" onclick="fetchMembers('ban')">🔄 Tải danh sách Member</button>
+                            <div class="member-list-container" id="member-list-ban">
+                                <span style="color:var(--text-3); font-size:12px;">Chưa tải danh sách...</span>
+                            </div>
+                            <label class="checkbox-row" style="margin-top: 10px;" for="select_all_ban">
+                                <input type="checkbox" id="select_all_ban" class="modern-toggle" onchange="toggleAllMembers('ban')">
+                                <span class="checkbox-label">Chọn tất cả</span>
+                            </label>
+                        </div>
+                        <div class="input-box">
+                            <label class="input-label" for="ban_delay">Delay Ban (s)</label>
+                            <input type="number" id="ban_delay" class="field" value="0.1" step="0.1" min="0">
+                        </div>
+                    </div>
+
+                    <!-- 05. WEBHOOK SPAM -->
+                    <div id="form-webhook_spam" class="form-container hidden">
+                        <div class="input-box">
+                            <label class="input-label" for="ws_url">Link Webhook</label>
+                            <input type="text" id="ws_url" class="field" placeholder="https://discord.com/api/webhooks/...">
+                        </div>
+                        <div class="input-box">
+                            <label class="input-label" for="ws_msg">Nội dung (Mỗi dòng 1 tin)</label>
+                            <textarea id="ws_msg" class="field" rows="3" placeholder="Dòng 1&#10;Dòng 2"></textarea>
+                            <label class="file-upload-btn">
+                                <span>📁 Tải file .txt</span>
+                                <input type="file" accept=".txt" onchange="readTxt(event, 'ws_msg')" hidden>
+                            </label>
+                        </div>
+                        <div class="row-grid-2">
+                            <div class="input-box">
+                                <label class="input-label" for="ws_count">Số lần (0=∞)</label>
+                                <input type="number" id="ws_count" class="field" value="1" min="0">
+                            </div>
+                            <div class="input-box">
+                                <label class="input-label" for="ws_delay">Delay (s)</label>
+                                <input type="number" id="ws_delay" class="field" value="0.1" step="0.1" min="0">
+                            </div>
+                        </div>
+                        <div class="row-grid-2">
+                            <label class="checkbox-row" for="ws_big_text">
+                                <input type="checkbox" id="ws_big_text" class="modern-toggle">
+                                <span class="checkbox-label">Chữ to (#)</span>
+                            </label>
+                            <label class="checkbox-row" for="ws_random_emoji">
+                                <input type="checkbox" id="ws_random_emoji" class="modern-toggle">
+                                <span class="checkbox-label">Random Emoji</span>
+                            </label>
+                        </div>
+                        <label class="checkbox-row" for="ws_ping_toggle">
+                            <input type="checkbox" id="ws_ping_toggle" class="modern-toggle" onchange="togglePingList('ws')">
+                            <span class="checkbox-label">Bật Ping</span>
+                        </label>
+                        <div id="ping-container-ws" class="hidden" style="margin-top:10px;">
+                            <button class="btn-core btn-launch" style="padding: 10px; font-size: 12px; margin-bottom: 10px;" onclick="fetchMembers('ws')">🔄 Tải danh sách Member</button>
+                            <div class="member-list-container" id="member-list-ws"></div>
+                            <label class="checkbox-row" style="margin-top: 10px;" for="select_all_ws">
+                                <input type="checkbox" id="select_all_ws" class="modern-toggle" onchange="toggleAllMembers('ws')">
+                                <span class="checkbox-label">Chọn tất cả (Ping @everyone)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 06. DELETE ALL CHANNELS -->
+                    <div id="form-delete_channels" class="form-container hidden">
+                        <div class="input-box">
+                            <label class="input-label" for="dc_delay">Delay Xóa (s)</label>
+                            <input type="number" id="dc_delay" class="field" value="0.1" step="0.1" min="0">
+                        </div>
+                    </div>
+
+                    <!-- 07. DESTROY -->
+                    <div id="form-destroy" class="form-container hidden">
+                        <div class="row-grid-2">
+                            <div class="input-box">
+                                <label class="input-label" for="destroy_srv_name">Tên Server Mới</label>
+                                <input type="text" id="destroy_srv_name" class="field" placeholder="Nuked Server">
+                            </div>
+                            <div class="input-box">
+                                <label class="input-label" for="destroy_ch_name">Tên Kênh Mới</label>
+                                <input type="text" id="destroy_ch_name" class="field" placeholder="nuked-by-yusei">
+                            </div>
+                        </div>
+                        <div class="input-box">
+                            <label class="input-label" for="destroy_msg">Nội Dung Spam</label>
+                            <textarea id="destroy_msg" class="field" rows="2" placeholder="Server bay màu"></textarea>
+                        </div>
+                        <div class="row-grid-2">
+                            <div class="input-box">
+                                <label class="input-label" for="destroy_delay">Delay (s)</label>
+                                <input type="number" id="destroy_delay" class="field" value="0.1" step="0.1" min="0">
+                            </div>
+                            <div class="input-box">
+                                <label class="input-label" for="destroy_count">Số lần (0=∞)</label>
+                                <input type="number" id="destroy_count" class="field" value="0" min="0">
+                            </div>
+                        </div>
+                        <div class="row-grid-2">
+                            <label class="checkbox-row" for="destroy_big_text">
+                                <input type="checkbox" id="destroy_big_text" class="modern-toggle">
+                                <span class="checkbox-label">Chữ to (#)</span>
+                            </label>
+                            <label class="checkbox-row" for="destroy_random_emoji">
+                                <input type="checkbox" id="destroy_random_emoji" class="modern-toggle">
+                                <span class="checkbox-label">Random Emoji</span>
+                            </label>
+                        </div>
+                        <label class="checkbox-row" for="destroy_ping">
+                            <input type="checkbox" id="destroy_ping" class="modern-toggle">
+                            <span class="checkbox-label">Ping @everyone</span>
+                        </label>
+                    </div>
+
+                    <!-- 08. TREO NGON -->
+                    <div id="form-treongon" class="form-container hidden">
+                        <div class="input-box">
+                            <label class="input-label" for="treongon_cid">ID Kênh</label>
+                            <input type="text" id="treongon_cid" class="field" placeholder="1234567890">
+                        </div>
+                        <div class="input-box">
+                            <label class="input-label" for="treongon_txt">Nội dung (Mỗi dòng 1 tin)</label>
+                            <textarea id="treongon_txt" class="field" rows="3" placeholder="Dòng 1&#10;Dòng 2"></textarea>
+                            <label class="file-upload-btn">
+                                <span>📁 Tải file .txt</span>
+                                <input type="file" accept=".txt" onchange="readTxt(event, 'treongon_txt')" hidden>
+                            </label>
+                        </div>
+                        <div class="row-grid-2">
+                            <div class="input-box">
+                                <label class="input-label" for="treongon_count">Số lần (0=∞)</label>
+                                <input type="number" id="treongon_count" class="field" value="0" min="0">
+                            </div>
+                            <div class="input-box">
+                                <label class="input-label" for="treongon_delay">Delay (s)</label>
+                                <input type="number" id="treongon_delay" class="field" value="0.5" step="0.1" min="0">
+                            </div>
+                        </div>
+                        <div class="row-grid-2">
+                            <label class="checkbox-row" for="treongon_big_text">
+                                <input type="checkbox" id="treongon_big_text" class="modern-toggle">
+                                <span class="checkbox-label">Chữ to (#)</span>
+                            </label>
+                            <label class="checkbox-row" for="treongon_random_emoji">
+                                <input type="checkbox" id="treongon_random_emoji" class="modern-toggle">
+                                <span class="checkbox-label">Random Emoji</span>
+                            </label>
+                        </div>
+                        <label class="checkbox-row" for="treongon_ping_toggle">
+                            <input type="checkbox" id="treongon_ping_toggle" class="modern-toggle" onchange="togglePingList('treongon')">
+                            <span class="checkbox-label">Bật Ping</span>
+                        </label>
+                        <div id="ping-container-treongon" class="hidden" style="margin-top:10px;">
+                            <button class="btn-core btn-launch" style="padding: 10px; font-size: 12px; margin-bottom: 10px;" onclick="fetchMembers('treongon')">🔄 Tải danh sách Member</button>
+                            <div class="member-list-container" id="member-list-treongon"></div>
+                            <label class="checkbox-row" style="margin-top: 10px;" for="select_all_treongon">
+                                <input type="checkbox" id="select_all_treongon" class="modern-toggle" onchange="toggleAllMembers('treongon')">
+                                <span class="checkbox-label">Chọn tất cả (Ping @everyone)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="deck-footer">
+                    <button class="btn-core btn-launch" onclick="startNuke()">
+                        <span>▶ CHẠY</span>
+                    </button>
+                    <button class="btn-core btn-stop" onclick="stopNuke()">
+                        <span>⏹ DỪNG</span>
+                    </button>
+                </div>
+            </section>
+
+            <section class="terminal-side">
+                <div class="term-header">
+                    <div class="traffic-dots">
+                        <span class="dot dot-r"></span>
+                        <span class="dot dot-y"></span>
+                        <span class="dot dot-g"></span>
+                    </div>
+                    <div class="term-status">
+                        <span class="status-light"></span>
+                        <span>SYSTEM READY</span>
+                    </div>
+                </div>
+
+                <div class="term-screen" id="console">
+                    <div class="log-entry">
+                        <span class="log-timestamp" style="color: #a855f7; font-weight: 700; text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);">[no1 Nuke]</span>
+                        <span class="log-tag tag-SUCCESS">READY</span>
+                        <span class="log-content SUCCESS">Sẵn sàng. Nhập cấu hình và bấm CHẠY.</span>
+                    </div>
+                </div>
+
+                <div class="corner-mascot">
+                    <div class="mascot-ring"></div>
+                    <div class="mascot-core">
+                        <svg class="skull-svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2C6.5 2 3.5 5.5 3.5 10c0 2.8 1.4 5.2 3.5 6.5V19c0 .6.4 1 1 1h8c.6 0 1-.4 1-1v-2.5c2.1-1.3 3.5-3.7 3.5-6.5 0-4.5-3-8-8.5-8z" fill="rgba(0, 242, 254, 0.12)"></path>
+                            <circle cx="8.5" cy="11" r="1.8" fill="#00f2fe" class="skull-eye"></circle>
+                            <circle cx="15.5" cy="11" r="1.8" fill="#00f2fe" class="skull-eye"></circle>
+                            <path d="M12 13.5l-1 2h2z" fill="#00f2fe"></path>
+                            <line x1="8.5" y1="20" x2="8.5" y2="18"></line>
+                            <line x1="12" y1="20" x2="12" y2="18"></line>
+                            <line x1="15.5" y1="20" x2="15.5" y2="18"></line>
+                            <line x1="7" y1="18" x2="17" y2="18"></line>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Âm thanh & Hiệu ứng
+        let audioCtx = null, isMuted = false, currentVol = 0.75;
+        function getAudioContext() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); return audioCtx; }
+        function playSound(type) {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext(), now = ctx.currentTime, gain = ctx.createGain(); gain.connect(ctx.destination);
+                if (type === 'click') { const osc = ctx.createOscillator(); osc.type='triangle'; osc.frequency.setValueAtTime(480,now); osc.frequency.exponentialRampToValueAtTime(110,now+0.045); gain.gain.setValueAtTime(0.18*currentVol,now); gain.gain.exponentialRampToValueAtTime(0.001,now+0.045); osc.connect(gain); osc.start(now); osc.stop(now+0.045); }
+                else if (type === 'launch') { const osc1=ctx.createOscillator(); const osc2=ctx.createOscillator(); osc1.type='sawtooth'; osc2.type='sine'; osc1.frequency.setValueAtTime(90,now); osc1.frequency.exponentialRampToValueAtTime(450,now+0.25); osc2.frequency.setValueAtTime(160,now); osc2.frequency.exponentialRampToValueAtTime(45,now+0.35); gain.gain.setValueAtTime(0.25*currentVol,now); gain.gain.exponentialRampToValueAtTime(0.001,now+0.35); osc1.connect(gain); osc2.connect(gain); osc1.start(now); osc2.start(now); osc1.stop(now+0.35); osc2.stop(now+0.35); }
+                else if (type === 'success') { [523.25, 659.25, 1046.5].forEach((freq, idx) => { const osc = ctx.createOscillator(); const noteGain = ctx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(freq, now + idx * 0.06); noteGain.gain.setValueAtTime(0.08 * currentVol, now + idx * 0.06); noteGain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.06 + 0.2); osc.connect(noteGain); noteGain.connect(ctx.destination); osc.start(now + idx * 0.06); osc.stop(now + idx * 0.06 + 0.2); }); }
+                else if (type === 'error') { const osc = ctx.createOscillator(); osc.type = 'sawtooth'; osc.frequency.setValueAtTime(260, now); osc.frequency.exponentialRampToValueAtTime(90, now + 0.2); gain.gain.setValueAtTime(0.15 * currentVol, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2); osc.connect(gain); osc.start(now); osc.stop(now + 0.2); }
+            } catch (e) {}
+        }
+        function toggleMute() { isMuted = !isMuted; document.getElementById('mute-toggle').innerText = isMuted ? '🔇' : '🔊'; if (!isMuted) playSound('click'); }
+        function changeVolume(v) { currentVol = parseFloat(v); if (isMuted && currentVol > 0) toggleMute(); playSound('click'); }
+        document.addEventListener('mousedown', (e) => { if (e.target.tagName !== 'OPTION') playSound('click'); });
+        document.addEventListener('mouseover', (e) => { if (e.target.matches('button, select, input, .modern-toggle, .dot, .file-upload-btn')) playSound('hover'); });
+
+        // Background
+        const stageCard = document.getElementById('stage-card');
+        window.addEventListener('mousemove', (e) => { if (document.getElementById('view-dashboard').classList.contains('hidden')) return; const { innerWidth: w, innerHeight: h } = window; const x = (e.clientX - w / 2) / (w / 2); const y = (e.clientY - h / 2) / (h / 2); stageCard.style.transform = `rotateY(${x * 3.5}deg) rotateX(${-y * 3.5}deg)`; });
+        const bgCanvas = document.getElementById('bg-canvas'), bgCtx = bgCanvas.getContext('2d');
+        let width = bgCanvas.width = window.innerWidth, height = bgCanvas.height = window.innerHeight;
+        window.addEventListener('resize', () => { width = bgCanvas.width = window.innerWidth; height = bgCanvas.height = window.innerHeight; });
+        const particles = Array.from({length: 42}, () => ({x: Math.random()*width, y: Math.random()*height, vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4, r: Math.random()*2+1, color: Math.random()>0.5?'rgba(0,242,254,0.4)':'rgba(138,43,226,0.4)'}));
+        function animateBg() {
+            bgCtx.clearRect(0, 0, width, height);
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i]; p.x += p.vx; p.y += p.vy; if (p.x<0||p.x>width) p.vx*=-1; if (p.y<0||p.y>height) p.vy*=-1;
+                bgCtx.beginPath(); bgCtx.arc(p.x, p.y, p.r, 0, Math.PI*2); bgCtx.fillStyle = p.color; bgCtx.fill();
+                for (let j = i + 1; j < particles.length; j++) { const p2 = particles[j]; const dx = p.x-p2.x, dy = p.y-p2.y; const dist = Math.sqrt(dx*dx+dy*dy); if (dist<110) { bgCtx.beginPath(); bgCtx.moveTo(p.x, p.y); bgCtx.lineTo(p2.x, p2.y); bgCtx.strokeStyle = `rgba(0, 242, 254, ${(1-dist/110)*0.15})`; bgCtx.lineWidth = 0.8; bgCtx.stroke(); } }
+            }
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        // Setup logic
+        let globalToken = localStorage.getItem('nuke_token') || '';
+        let globalServerId = localStorage.getItem('nuke_server') || '';
+        let globalServerName = localStorage.getItem('nuke_server_name') || '';
+
+        function updateHudDisplay() { document.getElementById('hud-target-name').innerText = globalServerName ? `${globalServerName} (${globalServerId})` : (globalServerId || 'Chưa thiết lập'); }
+        function checkConfig() { if (globalToken && globalServerId) { document.getElementById('view-setup').classList.add('hidden'); document.getElementById('view-dashboard').classList.remove('hidden'); updateHudDisplay(); } else { document.getElementById('view-setup').classList.remove('hidden'); document.getElementById('view-dashboard').classList.add('hidden'); if (globalToken) document.getElementById('setup-token').value = globalToken; } }
+
+        async function fetchServers() {
+            const token = document.getElementById('setup-token').value.trim();
+            if (!token) { alert("Nhập Token trước!"); playSound('error'); return; }
+            playSound('launch'); document.getElementById('loader').classList.remove('hidden'); document.getElementById('server-selection').classList.add('hidden');
+            try {
+                const res = await fetch('/api/get_guilds', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ token }) });
+                const data = await res.json();
+                if (data.error) { alert(data.error); playSound('error'); }
+                else if (Array.isArray(data)) {
+                    const select = document.getElementById('setup-guild'); select.innerHTML = '';
+                    data.forEach(g => { const opt = document.createElement('option'); opt.value = g.id; opt.dataset.name = g.name; opt.textContent = `${g.name} (${g.id})`; select.appendChild(opt); });
+                    document.getElementById('server-count-badge').innerText = `${data.length} Servers`;
+                    document.getElementById('server-selection').classList.remove('hidden');
+                    globalToken = token; playSound('success');
+                }
+            } catch (e) { alert("Lỗi API!"); playSound('error'); } finally { document.getElementById('loader').classList.add('hidden'); }
+        }
+
+        function saveConfig() {
+            const select = document.getElementById('setup-guild');
+            if (!select || !select.value) { alert("Chọn Server!"); playSound('error'); return; }
+            globalServerId = select.value;
+            globalServerName = select.options[select.selectedIndex].dataset.name || select.options[select.selectedIndex].textContent;
+            localStorage.setItem('nuke_token', globalToken); localStorage.setItem('nuke_server', globalServerId); localStorage.setItem('nuke_server_name', globalServerName);
+            const setupView = document.getElementById('view-setup'); setupView.classList.add('fade-out');
+            setTimeout(() => { setupView.classList.add('hidden'); setupView.classList.remove('fade-out'); document.getElementById('view-dashboard').classList.remove('hidden'); updateHudDisplay(); }, 350);
+            playSound('launch');
+        }
+
+        function editConfig() { playSound('click'); document.getElementById('setup-token').value = globalToken; document.getElementById('view-setup').classList.remove('hidden'); document.getElementById('view-setup').classList.remove('fade-out'); if (globalToken) fetchServers(); }
+
+        function readTxt(event, targetId) {
+            const file = event.target.files[0]; if (!file) return;
+            const reader = new FileReader(); reader.onload = function(e) { document.getElementById(targetId).value = e.target.result; playSound('success'); }; reader.readAsText(file);
+        }
+
+        // Terminal Logs
+        const consoleBox = document.getElementById('console');
+        function addLog(msg, level = 'INFO') {
+            const time = new Date().toLocaleTimeString(); const div = document.createElement('div'); div.className = 'log-entry';
+            div.innerHTML = `<span class="log-timestamp">[${time}]</span><span class="log-tag tag-${level}">${level}</span><span class="log-content ${level}">${msg}</span>`;
+            consoleBox.appendChild(div); consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+        const evtSource = new EventSource("/api/logs");
+        evtSource.onmessage = function(e) { try { const data = JSON.parse(e.data); addLog(data.message, data.level); if (data.level === 'SUCCESS') playSound('success'); if (data.level === 'WAITING') playSound('error'); } catch (err) {} };
+
+        function toggleForm() { document.querySelectorAll('.form-container').forEach(el => el.classList.add('hidden')); const act = document.getElementById('action').value; const target = document.getElementById('form-' + act); if (target) target.classList.remove('hidden'); }
+
+        // Toggle Ping Lists
+        function togglePingList(type) {
+            const isChecked = document.getElementById('ping_' + type + '_toggle').checked;
+            const container = document.getElementById('ping-container-' + type);
+            if (isChecked) {
+                container.classList.remove('hidden');
+                if (document.getElementById('member-list-' + type).innerHTML === '') {
+                    fetchMembers(type);
+                }
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+        // Members Fetching for Ban & Ping
+        async function fetchMembers(type) {
+            playSound('launch');
+            const container = document.getElementById('member-list-' + type);
+            container.innerHTML = '<span style="color:var(--accent-cyan); font-size:12px;">Đang tải thành viên...</span>';
+            
+            try {
+                const res = await fetch('/api/get_members', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: globalToken, server_id: globalServerId })
+                });
+                const data = await res.json();
+                
+                container.innerHTML = '';
+                if (data.length === 0) {
+                    container.innerHTML = '<span style="color:var(--text-3); font-size:12px;">Không có thành viên nào.</span>';
+                    return;
+                }
+                
+                data.forEach(m => {
+                    const label = document.createElement('label');
+                    label.className = 'member-item';
+                    label.innerHTML = `<input type="checkbox" class="member-cb-${type}" value="${m.id}"> ${m.name} <span style="color:var(--text-3); font-size:10px;">(${m.id})</span>`;
+                    container.appendChild(label);
+                });
+                playSound('success');
+            } catch (e) {
+                container.innerHTML = '<span style="color:var(--danger); font-size:12px;">Lỗi tải member!</span>';
+                playSound('error');
+            }
+        }
+
+        function toggleAllMembers(type) {
+            const isChecked = document.getElementById('select_all_' + type).checked;
+            document.querySelectorAll('.member-cb-' + type).forEach(cb => cb.checked = isChecked);
+            playSound('click');
+        }
+
+        async function startNuke() {
+            if (!globalToken || !globalServerId) { alert("Chưa cấu hình!"); editConfig(); return; }
+            
+            const action = document.getElementById('action').value;
+            let payload = { token: globalToken, server_id: globalServerId, action: action };
+
+            // VALIDATION & PAYLOAD
+            if (action === 'destroy') {
+                const srvName = document.getElementById('destroy_srv_name').value;
+                const chName = document.getElementById('destroy_ch_name').value;
+                const msg = document.getElementById('destroy_msg').value;
+                if (!srvName || !chName || !msg) { alert("Vui lòng nhập đủ Tên Server, Tên Kênh và Nội dung Spam!"); playSound('error'); return; }
+                
+                payload.srv_name = srvName;
+                payload.channel_id = chName;
+                payload.msg = msg;
+                payload.delay = parseFloat(document.getElementById('destroy_delay').value);
+                payload.count = parseInt(document.getElementById('destroy_count').value);
+                payload.big_text = document.getElementById('destroy_big_text').checked;
+                payload.random_emoji = document.getElementById('destroy_random_emoji').checked;
+                payload.ping_ids = document.getElementById('destroy_ping').checked ? ["everyone"] : [];
+            } else if (action === 'treongon') {
+                const cid = document.getElementById('treongon_cid').value;
+                const txt = document.getElementById('treongon_txt').value;
+                if (!cid || !txt) { alert("Vui lòng nhập ID Kênh và Nội dung!"); playSound('error'); return; }
+                
+                payload.channel_id = cid;
+                payload.msg = txt;
+                payload.delay = parseFloat(document.getElementById('treongon_delay').value);
+                payload.count = parseInt(document.getElementById('treongon_count').value);
+                payload.big_text = document.getElementById('treongon_big_text').checked;
+                payload.random_emoji = document.getElementById('treongon_random_emoji').checked;
+                if (document.getElementById('treongon_ping_toggle').checked) {
+                    payload.ping_ids = Array.from(document.querySelectorAll('.member-cb-treongon:checked')).map(cb => cb.value);
+                }
+            } else if (action === 'ban') {
+                const selected = Array.from(document.querySelectorAll('.member-cb-ban:checked')).map(cb => cb.value);
+                if (selected.length === 0) { alert("Vui lòng chọn ít nhất 1 member để ban!"); playSound('error'); return; }
+                payload.file_content = selected.join(",");
+                payload.delay = parseFloat(document.getElementById('ban_delay').value);
+            } else if (action === 'mass_message') {
+                const cid = document.getElementById('mm_cid').value;
+                const txt = document.getElementById('mm_msg').value;
+                if (!cid || !txt) { alert("Vui lòng nhập ID Kênh và Nội dung!"); playSound('error'); return; }
+                
+                payload.channel_id = cid;
+                payload.msg = txt;
+                payload.count = parseInt(document.getElementById('mm_count').value);
+                payload.delay = parseFloat(document.getElementById('mm_delay').value);
+                payload.big_text = document.getElementById('mm_big_text').checked;
+                payload.random_emoji = document.getElementById('mm_random_emoji').checked;
+                if (document.getElementById('mm_ping_toggle').checked) {
+                    payload.ping_ids = Array.from(document.querySelectorAll('.member-cb-mm:checked')).map(cb => cb.value);
+                }
+            } else if (action === 'create_channels') {
+                const name = document.getElementById('cc_name').value;
+                if (!name) { alert("Vui lòng nhập Tên Kênh!"); playSound('error'); return; }
+                payload.msg = name;
+                payload.num = parseInt(document.getElementById('cc_num').value);
+                payload.delay = parseFloat(document.getElementById('cc_delay').value);
+            } else if (action === 'create_roles') {
+                const name = document.getElementById('cr_name').value;
+                if (!name) { alert("Vui lòng nhập Tiền tố Role!"); playSound('error'); return; }
+                payload.msg = name;
+                payload.num = parseInt(document.getElementById('cr_num').value);
+                payload.delay = parseFloat(document.getElementById('cr_delay').value);
+            } else if (action === 'webhook_spam') {
+                const url = document.getElementById('ws_url').value;
+                const txt = document.getElementById('ws_msg').value;
+                if (!url || !txt) { alert("Vui lòng nhập Link Webhook và Nội dung!"); playSound('error'); return; }
+                
+                payload.webhook_url = url;
+                payload.msg = txt;
+                payload.count = parseInt(document.getElementById('ws_count').value);
+                payload.delay = parseFloat(document.getElementById('ws_delay').value);
+                payload.big_text = document.getElementById('ws_big_text').checked;
+                payload.random_emoji = document.getElementById('ws_random_emoji').checked;
+                if (document.getElementById('ws_ping_toggle').checked) {
+                    payload.ping_ids = Array.from(document.querySelectorAll('.member-cb-ws:checked')).map(cb => cb.value);
+                }
+            } else if (action === 'delete_channels') {
+                payload.delay = parseFloat(document.getElementById('dc_delay').value);
+            }
+
+            playSound('launch');
+            consoleBox.innerHTML = ''; addLog("Đang khởi chạy...", "INFO");
+            try {
+                const res = await fetch('/api/start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const data = await res.json();
+                if (data.error) { alert(data.error); playSound('error'); }
+            } catch (err) { playSound('error'); }
+        }
+
+        async function stopNuke() { playSound('error'); await fetch('/api/stop', { method: 'POST' }); }
+
+        checkConfig();
+        toggleForm();
+    </script>
+</body>
+</html>
